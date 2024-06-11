@@ -13,8 +13,12 @@ vaadin-side-nav-item vaadin-icon {
   padding: var(--lumo-space-s) var(--lumo-space-m);
   min-height: var(--lumo-size-xl);
   box-sizing: border-box;
+  background-color: #ff862f;
 }
 
 [slot="drawer"]:is(header, footer):is(:empty) {
   display: none;
+  background-color: #ff862f;
 }
+
+

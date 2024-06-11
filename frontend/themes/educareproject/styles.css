@@ -1,2 +1,59 @@
 @import url('./main-layout.css');
 @import url('./views/atendimentos-view.css');
+
+vaadin-login-form {
+    --lumo-shade-20pct: rgba(0, 0, 0, 0.2);
+    --lumo-tint-20pct: rgba(255, 255, 255, 0.2);
+    --lumo-primary-color: #ff862f;
+    --lumo-primary-text-color: #ffffff;
+}
+
+vaadin-login-overlay-wrapper {
+    --lumo-shade-10pct: rgba(0, 0, 0, 0.1); /* Fundo da sobreposição */
+    --lumo-base-color: #ffffff; /* Cor de fundo do overlay */
+    --lumo-primary-text-color: #000000; /* Cor do texto */
+    --lumo-primary-color: #ff862f; /* Cor do botão de login */
+}
+
+.save {
+    background-color: #fbfae6;
+    color: #ff862f;
+}
+
+.delete {
+    background-color: #fbfae6;
+    color: red;
+}
+
+.cancel {
+    background-color: #fbfae6;
+    color: #ff862f;
+}
+
+.editor-layout {
+    background-color: #fbfae6;
+}
+
+.navbar {
+    background-color: #fbfae6;
+    color: #ff862f;
+}
+
+.grid-atendimentos .header{
+    background-color: #ff862f;
+}
+
+/* Estilo para o cabeçalho do grid */
+.grid-atendimentos::part(header-cell) {
+    background-color: #fbfae6;
+    color: #333;
+}
+
+/* Estilo para as células do grid */
+.grid-atendimentos::part(cell) {
+    background-color: #fbfae6;
+    color: #333;
+}
+
+
+

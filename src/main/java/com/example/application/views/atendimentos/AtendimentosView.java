@@ -7,6 +7,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -50,8 +51,11 @@ public class AtendimentosView extends Div implements BeforeEnterObserver {
     private TextField observacoes;
     private TextField links;
 
-    private final Button cancel = new Button("Cancel");
-    private final Button save = new Button("Save");
+
+    private final Button cancel = new Button("Cancelar");
+    private final Button save = new Button("Salvar");
+    private final Button delete = new Button("Deletar");
+
 
     private final BeanValidationBinder<Atendimentos> binder;
 
@@ -72,6 +76,7 @@ public class AtendimentosView extends Div implements BeforeEnterObserver {
         add(splitLayout);
 
         // Configure Grid
+        grid.addClassName("grid-atendimentos");
         grid.addColumn("nome").setAutoWidth(true);
         grid.addColumn("periodo").setAutoWidth(true);
         grid.addColumn("curso").setAutoWidth(true);
@@ -116,15 +121,16 @@ public class AtendimentosView extends Div implements BeforeEnterObserver {
                 atendimentosService.update(this.atendimentos);
                 clearForm();
                 refreshGrid();
-                Notification.show("Data updated");
+                Notification.show("\n" +
+                        "Dados atualizados");
                 UI.getCurrent().navigate(AtendimentosView.class);
             } catch (ObjectOptimisticLockingFailureException exception) {
                 Notification n = Notification.show(
-                        "Error updating the data. Somebody else has updated the record while you were making changes.");
+                        "Erro ao atualizar os dados. Outra pessoa atualizou o registro enquanto você fazia alterações.");
                 n.setPosition(Position.MIDDLE);
                 n.addThemeVariants(NotificationVariant.LUMO_ERROR);
             } catch (ValidationException validationException) {
-                Notification.show("Failed to update the data. Check again that all values are valid");
+                Notification.show("Falha ao atualizar os dados. Verifique novamente se todos os valores são válidos");
             }
         });
     }
@@ -138,7 +144,8 @@ public class AtendimentosView extends Div implements BeforeEnterObserver {
                 populateForm(atendimentosFromBackend.get());
             } else {
                 Notification.show(
-                        String.format("The requested atendimentos was not found, ID = %s", atendimentosId.get()), 3000,
+                        String.format("\n" +
+                                "Os atendimentos solicitados não foram encontrados, ID = %s", atendimentosId.get()), 3000,
                         Notification.Position.BOTTOM_START);
                 // when a row is selected but the data is no longer available,
                 // refresh grid
@@ -163,7 +170,7 @@ public class AtendimentosView extends Div implements BeforeEnterObserver {
         dataDaUltimaConsulta = new DatePicker("Data Da Ultima Consulta");
         email = new TextField("Email");
         telefone = new TextField("Telefone");
-        observacoes = new TextField("Observacoes");
+        observacoes = new TextField("Observações");
         links = new TextField("Links");
         formLayout.add(nome, periodo, curso, dataDaUltimaConsulta, email, telefone, observacoes, links);
 
@@ -178,12 +185,29 @@ public class AtendimentosView extends Div implements BeforeEnterObserver {
         buttonLayout.setClassName("button-layout");
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonLayout.add(save, cancel);
+        cancel.addClassName("cancel");
+        save.addClassName("save");
+        delete.addClassName("delete");
+        buttonLayout.add(save, cancel, delete); // Add the new "Delete" button
         editorLayoutDiv.add(buttonLayout);
+        delete.addClickListener(e -> deletePaciente());
+    }
+
+    private void deletePaciente() {
+        Atendimentos selectedPaciente = grid.asSingleSelect().getValue();
+        if (selectedPaciente != null) {
+            atendimentosService.delete(selectedPaciente.getId());
+            refreshGrid();
+            clearForm();
+            Notification.show("Paciente deletado");
+        } else {
+            Notification.show("Nenhum paciente selecionado para exclusão");
+        }
     }
 
     private void createGridLayout(SplitLayout splitLayout) {
         Div wrapper = new Div();
+        wrapper.addClassName("grid-wrapper");
         wrapper.setClassName("grid-wrapper");
         splitLayout.addToPrimary(wrapper);
         wrapper.add(grid);

@@ -31,7 +31,7 @@
 .atendimentos-view .button-layout {
   width: 100%;
   flex-wrap: wrap;
-  background-color: var(--lumo-contrast-5pct);
+  background-color: #ffffff;
   padding-bottom: var(--lumo-space-s);
   padding-top: var(--lumo-space-s);
   padding-left: var(--lumo-space-l);

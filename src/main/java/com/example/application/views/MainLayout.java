@@ -73,7 +73,7 @@ public class MainLayout extends AppLayout {
                     LineAwesomeIcon.BOOK_MEDICAL_SOLID.create()));
 
         }
-
+        nav.addClassNames("navbar");
         return nav;
     }
 
